@@ -36,104 +36,29 @@ void drawCircle(int x,int y,int r)
 
 void drawLine(int x1,int y1,int x2,int y2)//Draws Lines between 2 points
 {
-	int delX = x2-x1;
-	int delY = y2-y1;
-	int x=x1;
-	int y=y1;
-	int count =0;
-	int till;
-	glBegin(GL_POINTS);
-		glVertex2f(abs(x1), abs(y1));
-	glEnd();
-	if(delX == 0)
-	{
-		//printf("vERTI");
-		till=abs(delY);
-		int inc;
-		if(delY<0)
-			inc = -1;
-		else
-			inc = +1;
-		while(count<till)
-		{
-			y=y+inc;
-			glBegin(GL_POINTS);
-					glVertex2f(abs(x),abs(y));
-			glEnd();
-			glFlush();
-			count++;
-		}
-	}
-	else if(delY == 0)
-	{
-		//printf("HORI");
-		till=abs(delX);
-		int inc;
-		if(delX<0)
-			inc = -1;
-		else
-			inc = +1;
-		while(count<till)
-		{
-			x=x+inc;
-			glBegin(GL_POINTS);
-					glVertex2f(abs(x),abs(y));
-			glEnd();
-			glFlush();
-			count++;
-		}
-	}
+	float dx=x2-x1;
+	float dy=y2-y1;
+	float steps;
+	if(abs(dx)>abs(dy))
+		steps=abs(dx);
 	else
+		steps=abs(dy);
+	float xinc=dx/steps;
+	float yinc=dy/steps;
+	float x=x1;
+	float y=y1;
+	glBegin(GL_POINTS);
+			glVertex2f(abs(x1), abs(y1));
+		glEnd();
+	int i;
+	for(i=0;i<steps;i++)
 	{
-		float m = delY/delX;
-		float P = 2*delY-delX;
-		int xinc=1,yinc=1;
-		if(delX<0)
-			xinc=-1;
-		if(delY<0)
-			yinc=-1;
-		delX=abs(delX);
-		delY=abs(delY);
-		if(abs(m)<1)
-		{
-			till=abs(delX);
-			while(count<till)
-			{		
-				x=x+xinc;
-				if(P<0)
-					P=P+2*delY;
-				else
-				{
-					y=y+yinc;
-					P=P+2*delY-2*delX;
-				}
-				glBegin(GL_POINTS);
-					glVertex2f(abs(x),abs(y));
-				glEnd();
-				glFlush();
-				count++;
-			}
-		}	
-		else
-		{
-			till=abs(delY);	
-			while(count<till)
-			{
-				y=y+yinc;
-				if(P<0)
-					P=P+2*delY;
-				else
-				{
-					x=x+xinc;
-					P=P+2*delY-2*delX;
-				}
-				glBegin(GL_POINTS);
-					glVertex2f(abs(x),abs(y));
-				glEnd();
-				glFlush();
-				count++;
-			}
-		}
+		x=x+xinc;
+		y=y+yinc;
+		glBegin(GL_POINTS);
+			glVertex2f(abs(x), abs(y));
+		glEnd();
+		glFlush();
 	}
 }
 
@@ -156,10 +81,10 @@ void render()
 	getPoints(&x,&y,&r);
 	drawCircle(x,y,r);
 	drawCircle(x,y,2*r);
-	drawLine(x,y-r,x+sqrt(3)*r,y-r);
-	drawLine(x,y-r,x-sqrt(3)*r,y-r);
-	drawLine(x+sqrt(3)*r,y-r,x,y+(2*r));
-	//drawLine(x,y+2*r,x-sqrt(3)*r,y-r);
+	drawLine(x,y-r,(int)(x+sqrt(3)*r),y-r);
+	drawLine(x,y-r,(int)(x-sqrt(3)*r),y-r);
+	drawLine(x,y+2*r,(int)(x+sqrt(3)*r),y-r);
+	drawLine(x,y+2*r,x-sqrt(3)*r,y-r);
 }
 
 int main(int argc,char *argv[])

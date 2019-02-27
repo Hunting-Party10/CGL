@@ -56,6 +56,9 @@ void drawFig()
 	drawLine(x2,y2,x3,y3);
 	drawLine(x3,y3,x4,y4);
 	drawLine(x4,y4,x1,y1);
+	/*
+	Calculation of the the points for the given set of lines
+	*/
 	int m1[]={(x1+x2)/2,(y1+y2)/2};
 	int m2[]={(x2+x3)/2,(y2+y3)/2};
 	int m3[]={(x3+x4)/2,(y3+y4)/2};
@@ -84,9 +87,9 @@ int main(int argc, char *argv[])
 {
   glutInit(&argc, argv);
   glutInitDisplayMode(GLUT_RGB);
-  glutInitWindowSize(400,500);
+  glutInitWindowSize(400,500);//Window Size
   glutCreateWindow("DDA Method");
-  glClearColor(0.0, 0.0, 0.0, 0.0);
+  glClearColor(0.0, 0.0, 0.0, 0.0);//Black Colour
   gluOrtho2D(0,400,0,500);//x-0 to 400 y-0 to 500
   glutDisplayFunc(drawFig);
   glutMainLoop();
