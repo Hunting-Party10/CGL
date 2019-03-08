@@ -1,32 +1,33 @@
 #include <GL/freeglut.h>
-#include<GL/glut.h>
 #include <GL/gl.h>
-GLfloat r,g,b;
+#include <GL/glut.h>
+#include <stdio.h>
 GLint xstart=50,ystart=50;
 GLint xend=450,yend=450;
-void Init()
-{
-	glClearColor(1.0,1.0,1.0,1.0);
-  	glMatrixMode(GL_PROJECTION);
-  	gluOrtho2D(0,500,0,500);
-	glClear(GL_COLOR_BUFFER_BIT);
-}
 
-void flood_fill(int x ,int y, pixel oldColor, pixel fillColor)
+typedef struct pixel
 {
+	GLfloat red;
+	GLfloat blue;
+	GLfloat green;
+}pixel;
+
+void flood_fill(int x ,int y, pixel oldcolor, pixel fillcolor)
+{
+	pixel c;
 	glReadPixels(x,y,1,1,GL_RGB,GL_UNSIGNED_BYTE, &c);
-	if(c.red== oldColor.red && c.green== oldColor.green && c.blue==       
-               oldColor.blue)
+	if(c.red == 1.0 && c.green != 1.0 && c.blue !=       
+               1.0)
 	{
-		glColor3ub(fillColor.red, fillColor.green, fillColor.blue);
+		glColor3f(fillcolor.red,fillcolor.green,fillcolor.blue);
 		glBegin(GL_POINTS);
-  		      glVertex2i(x, y);
+  		      glVertex2f(x, y);
 		glEnd();
 		glFlush();
-		flood_fill(x+1,y, oldColor, fillColor);
-		flood_fill(x-1,y, oldColor, fillColor);
-		flood_fill(x,y+1, oldColor, fillColor);
-		flood_fill(x,y-1, oldColor, fillColor);		
+		flood_fill(x+1,y, oldcolor, fillcolor);
+		flood_fill(x-1,y, oldcolor, fillcolor);
+		flood_fill(x,y+1, oldcolor, fillcolor);
+		flood_fill(x,y-1, oldcolor, fillcolor);		
 	}
 }
 
@@ -74,11 +75,20 @@ void BresenhamLine(int x1,int y1,int x2,int y2){
 
 }
 
-void render()
-{
-	r = 1.0;
-	g=b=0.0;
-	glColor3f(r,g,b);	//Color to use for for drawing objects - (R,G,B) values
+void render(){
+
+	
+	pixel oldcolor;
+	oldcolor.red =1.0;
+	oldcolor.green = 0.0;
+	oldcolor.blue = 0.0;
+	
+	pixel newcolor;
+	newcolor.red =0.0;
+	newcolor.green = 0.0;
+	newcolor.blue = 0.0;
+	
+	glColor3f(oldcolor.red,oldcolor.green,oldcolor.blue);	//Color to use for for drawing objects - (R,G,B) values
 	BresenhamLine(50,50,450,50);
 	BresenhamLine(50,150,450,150);
 	BresenhamLine(50,250,450,250);
@@ -90,27 +100,22 @@ void render()
 	BresenhamLine(350,50,350,450);
 	BresenhamLine(450,50,450,450);
 	
-	flood_fill(51,51);
+	
+	flood_fill(51,51,oldcolor,newcolor);
 	
 }
 
 
 int main(int argc, char **argv)
-{glutInit(&argc,argv); // Initialise GLUT library 
-
+{
+	glutInit(&argc,argv); // Initialise GLUT library 
   	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);   	// Set the initial display mode
-  	Declare initial window size, position, and display mode
- *  (single buffer and RGBA).  Open window with "hello"
- *  in its title bar.  Call initialization routines.
- *  Register callback function to d
   	glutInitWindowSize(500,500);
-  	
-  	glutInitWindowPosition(250,250); // Set the initial window position
-  	
+  	glutInitWindowPosition(250,250); // Set the initial window position  	
   	glutCreateWindow("Assignment 4"); // Create window with title Assignment4
-	Init();
-
-
+	glClearColor(1.0,1.0,1.0,0.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	gluOrtho2D(0,500,0,500);
 	glutDisplayFunc(render);
 	glutMainLoop();
 }
