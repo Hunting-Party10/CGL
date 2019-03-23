@@ -1,14 +1,15 @@
 #include <stdio.h>
-#include <math.h>
+#include <stdlib.h>
 #include <GL/glut.h>
 
 GLsizei winHeight=500,winWidth=500;
 int c = 0;
 GLfloat red=1.0,green=0.0,blue=0.0;
 
-struct scrPt{
+typedef struct scrPt{
 	GLint x,y;
-};
+}scrPt;
+
 scrPt polypts[10];
 
 void drawLine(int x1,int y1,int x2,int y2)//Draws Lines between 2 points
@@ -37,7 +38,7 @@ void drawLine(int x1,int y1,int x2,int y2)//Draws Lines between 2 points
 		glEnd();
 		glFlush();
 	}
-		
+
 }
 
 void Init()
@@ -84,15 +85,15 @@ void ColorSelect(GLint ch)
 		case 3:
 			if(c <= 1)
 				break;
-				for(i = 0; i<c-1;i++)
-				{	
-					scrPt p1 = polypts[i];
-					scrPt p2 = polypts[i+1];
-					drawLine(p1.x,p1.y,p2.x,p2.y);	
-				}
-				drawLine(polypts[0].x,polypts[0].y,polypts[c-1].x,polypts[c-1].y);
-				c = 0;
-				break;			
+			for(i = 0; i<c-1;i++)
+			{
+				scrPt p1 = polypts[i];
+				scrPt p2 = polypts[i+1];
+				drawLine(p1.x,p1.y,p2.x,p2.y);
+			}
+			drawLine(polypts[0].x,polypts[0].y,polypts[c-1].x,polypts[c-1].y);
+			c = 0;
+			break;
 		case 4:
 			glClear(GL_COLOR_BUFFER_BIT);
 			break;
@@ -105,30 +106,30 @@ void ColorSelect(GLint ch)
 
 int main(int argc, char **argv)
 {
-  
-  	glutInit(&argc,argv); // Initialise GLUT library 
+
+  	glutInit(&argc,argv); // Initialise GLUT library
 
   	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);   	// Set the initial display mode
-  	
+
   	glutInitWindowSize(500,500);
-  	
+
   	glutInitWindowPosition(100,100); // Set the initial window position and size
-  	
+
   	glutCreateWindow("Assignment 3"); // Create window with title DDA_Line
-  	
+
   	Init(); // Initialize drawing colors
 
   	glutDisplayFunc(displayFunc);  	// Call the displaying function
 	glutMouseFunc(mousePoint);
-  	
-  	
+
+
   	glutCreateMenu(ColorSelect);
   		glutAddMenuEntry("Red",1);
   		glutAddMenuEntry("Blue",2);
   		glutAddMenuEntry("Draw Polygon",3);
   		glutAddMenuEntry("Clear Screen",4);
   	glutAttachMenu(GLUT_RIGHT_BUTTON);
-  	
+
   	glutMainLoop();// Keep displaying until the program is closed
 	return 0;
 }
