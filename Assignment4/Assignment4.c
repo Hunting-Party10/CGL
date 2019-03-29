@@ -80,7 +80,7 @@ void BresenhamLine(int x1,int y1,int x2,int y2){
 }
 void drawbase()
 {
-	
+
 	glClear(GL_COLOR_BUFFER_BIT);
 	pixel oldcolor;
 	oldcolor.red =1.0;
@@ -114,22 +114,22 @@ void drawbase()
 		point[k][0] = xend - xstart;
 		point[k][1] = ystart + offset - ystart;
 		k++;
-		
+
 		offset += block;
 	}
 	offset =block;
 	int y = ystart;
-	boundry_fill(xstart+1,y+1,oldcolor,newcolor);
-	boundry_fill(xstart + 2*offset+1,y+1,oldcolor,newcolor);
+	//boundry_fill(xstart+1,y+1,oldcolor,newcolor);
+//	boundry_fill(xstart + 2*offset+1,y+1,oldcolor,newcolor);
 	y+=block;
-	boundry_fill(xstart + offset + 1,y + 1,oldcolor,newcolor);
-	boundry_fill(xstart + offset + offset + offset + 1,y + 1,oldcolor,newcolor);
+	//boundry_fill(xstart + offset + 1,y + 1,oldcolor,newcolor);
+	//boundry_fill(xstart + offset + offset + offset + 1,y + 1,oldcolor,newcolor);
 	y+=block;
-	boundry_fill(xstart+1,y+1,oldcolor,newcolor);
-	boundry_fill(xstart + 2*offset+1,y+1,oldcolor,newcolor);
+	//boundry_fill(xstart+1,y+1,oldcolor,newcolor);
+	//boundry_fill(xstart + 2*offset+1,y+1,oldcolor,newcolor);
 	y+=block;
-	boundry_fill(xstart + offset+1,y+1,oldcolor,newcolor);
-	boundry_fill(xstart + offset + offset + offset + 1,y + 1,oldcolor,newcolor);
+	//boundry_fill(xstart + offset+1,y+1,oldcolor,newcolor);
+	//boundry_fill(xstart + offset + offset + offset + 1,y + 1,oldcolor,newcolor);
 
 }
 void render(){
@@ -150,24 +150,25 @@ void rotate()
 	newcolor.green = 0.0;
 	newcolor.blue = 0.0;
 	glClear(GL_COLOR_BUFFER_BIT);
-	printf("%lf-%lf\n",point[0][0],point[0][1]);
-	printf("%lf-%lf\n",point[1][0],point[1][1]);
+	//printf("%lf-%lf\n",point[1][0],point[1][1]);
 	transform[0][0] = transform[0][1] = transform[1][0] = transform [1][1] = 1/sqrt(2);
 	transform[1][0] *= -1;
 	int i;
 	glColor3f(oldcolor.red,oldcolor.green,oldcolor.blue);
+	//printf("%lf\n",(point[1][0] * transform[0][1] + point[1][1] * transform[1][1]));
 	for(i = 0; i<20;i++)
 	{
-		point[i][0] = (point[i][0] * transform[0][0] + point[i][1] * transform[1][0]);
-		point[i][1] = (point[i][0] * transform[0][1] + point[i][1] * transform[1][1]); 
+		int temp1 = (point[i][0] * transform[0][0] + point[i][1] * transform[1][0]);
+		int temp2 = (point[i][0] * transform[0][1] + point[i][1] * transform[1][1]);
+		point[i][0] = temp1;
+		point[i][1] = temp2;
 	}
-	printf("%lf-%lf\n",point[0][0],point[0][1]);
-	printf("%lf-%lf\n",point[1][0],point[1][1]);
-	for(i = 0;i<1;i+=2)
+
+	for(i = 0;i<20;i+=2)
 	{
 		BresenhamLine(point[i][0] + xstart,point[i][1] +ystart,point[i+1][0]+ xstart,point[i+1][1]+ ystart);
 	}
-	
+
 }
 
 void mousePoint(GLint button,GLint action,GLint xMouse,GLint yMouse){
